@@ -201,66 +201,69 @@ tr:hover {
             font-size: 1.2em;
             font-weight: bold;
         }
-
-        /* Style tombol + dan - */
-.sold-item div button {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    font-size: 22px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-}
-
-.sold-item div button.increase-btn {
-    background: #4caf50;
-    color: white;
-}
-
-.sold-item div button.increase-btn:hover {
-    background: #43a047;
-    transform: scale(1.1);
-}
-
-.sold-item div button.decrease-btn {
-    background: #f44336;
-    color: white;
-}
-
-.sold-item div button.decrease-btn:hover {
-    background: #e53935;
-    transform: scale(1.1);
-}
-
-/* Input jumlah */
-.sold-item input.jumlah-terjual {
-    width: 70px;
-    text-align: center;
-    font-weight: bold;
-    font-size: 18px;
-    border-radius: 12px;
-    border: none;
-    background: #e3f2fd;
-    color: #0d47a1;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
-    padding: 8px 0;
-    transition: all 0.2s;
-}
-
-/* Kontainer produk */
+        /* --- Sold Item Mobile Styling --- */
 .sold-item {
     display: flex;
-    justify-content: space-between;
+    flex-wrap: nowrap;
     align-items: center;
+    justify-content: space-between;
     background: linear-gradient(135deg, #f0f4ff, #dbe4ff);
-    padding: 12px 16px;
-    border-radius: 14px;
+    padding: 10px 15px;
+    border-radius: 12px;
     margin-bottom: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+}
+
+.sold-item label {
+    font-weight: 600;
+    font-size: 14px;
+    color: #0d47a1;
+    flex: 2;
+}
+
+.sold-item .controls {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.sold-item .controls button {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.sold-item .controls input.jumlah-terjual {
+    flex: 1;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 8px;
+    background: #e3f2fd;
+    padding: 6px 0;
+    font-size: 16px;
+    color: #0d47a1;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+    border: none;
+}
+
+/* Media Query khusus HP */
+@media (max-width: 480px) {
+    .sold-item {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+    .sold-item .controls {
+        justify-content: space-between;
+    }
+    .sold-item .controls input.jumlah-terjual {
+        width: 100%;
+        margin: 0 5px;
+    }
 }
 
         #totalOverall {
