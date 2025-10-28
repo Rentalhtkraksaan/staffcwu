@@ -6,18 +6,19 @@
     <title>Tampilan Ketua - Data Penjualan Klub</title>
     <style>
         body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f0f2f5;
-      color: #333;
-      padding: 20px;
-    }
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(120deg, #e0f7fa, #f0f4ff);
+  color: #333;
+  padding: 20px;
+}
     .container {
       max-width: 1200px;
       margin: 20px auto;
       background-color: #fff;
+      background: linear-gradient(145deg, #ffffff, #e3f2fd);
       padding: 30px;
       border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
       position: relative; /* supaya icon bisa absolute di dalam */
     }
     h1 {
@@ -25,6 +26,51 @@
       color: #007bff;
       margin-bottom: 20px;
     }
+
+    .increase-btn, .decrease-btn {
+    transition: all 0.3s ease;
+}
+.increase-btn:hover {
+    background: #66bb6a;
+    box-shadow: 0 0 12px #66bb6a;
+}
+.decrease-btn:hover {
+    background: #ef5350;
+    box-shadow: 0 0 12px #ef5350;
+}
+tr {
+  background: linear-gradient(90deg, #ffffff, #e0f7fa);
+  border-radius: 12px;
+  margin-bottom: 12px;
+  display: block;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+th, td {
+  border: none;
+  padding: 12px;
+}
+tr:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+.profit-container {
+  background: linear-gradient(135deg, #e0f7fa, #bbdefb);
+  padding: 15px 20px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+.seller-profit, .chair-profit {
+  color: #0d47a1;
+}
+.loading-text {
+  font-style: italic;
+  color: #007bff;
+  animation: pulse 1.5s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
     /* Icon Drive pojok kanan atas */
     .drive-link {
       position: absolute;
@@ -657,41 +703,103 @@ backLink.addEventListener('click', (e) => {
 
     // === RENDER FORM PENJUALAN ===
     function renderSoldItemsForm(products, sellerData) {
-        const productArray = Object.values(products);
-        if (productArray.length > 0) {
-            soldItemsForm.style.display = 'block';
-            soldItemsList.innerHTML = '';
-            productArray.forEach(product => {
-                const productItem = document.createElement('div');
-                productItem.classList.add('sold-item');
-                productItem.innerHTML = `
-                    <label>${product.namaProduk} (${product.totalUnit} unit):</label>
-                    <input type="number"
+    const productArray = Object.values(products);
+    if (productArray.length > 0) {
+        soldItemsForm.style.display = 'block';
+        soldItemsList.innerHTML = '';
+        productArray.forEach(product => {
+            const productItem = document.createElement('div');
+            productItem.classList.add('sold-item');
+            productItem.style.display = 'flex';
+            productItem.style.justifyContent = 'space-between';
+            productItem.style.alignItems = 'center';
+            productItem.style.background = 'linear-gradient(135deg, #f0f4ff, #dbe4ff)';
+            productItem.style.padding = '12px 20px';
+            productItem.style.borderRadius = '12px';
+            productItem.style.boxShadow = '0 8px 20px rgba(0,0,0,0.08)';
+            productItem.style.marginBottom = '12px';
+            productItem.style.transition = 'transform 0.2s, box-shadow 0.2s';
+
+            productItem.addEventListener('mouseenter', () => {
+                productItem.style.transform = 'translateY(-2px)';
+                productItem.style.boxShadow = '0 12px 25px rgba(0,0,0,0.12)';
+            });
+            productItem.addEventListener('mouseleave', () => {
+                productItem.style.transform = 'translateY(0)';
+                productItem.style.boxShadow = '0 8px 20px rgba(0,0,0,0.08)';
+            });
+
+            productItem.innerHTML = `
+                <label style="font-weight:600; font-size:16px; color:#0d47a1; flex:1;">${product.namaProduk} (${product.totalUnit} unit)</label>
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <button type="button" class="decrease-btn" 
+                            data-product-name="${product.namaProduk.toLowerCase()}"
+                            style="
+                                width:40px; height:40px;
+                                border:none; border-radius:50%;
+                                background:#f44336; color:white; font-size:20px;
+                                cursor:pointer; transition:all 0.2s;
+                            ">-</button>
+                    <input type="text"
                            class="jumlah-terjual"
-                           min="0"
-                           max="${product.totalUnit}"
                            value="0"
+                           readonly
                            data-harga-satuan="${product.hargaSatuan}"
-                           data-product-name="${product.namaProduk.toLowerCase()}">
-                `;
-                soldItemsList.appendChild(productItem);
-            });
+                           data-product-name="${product.namaProduk.toLowerCase()}"
+                           style="
+                                width:70px; text-align:center; font-weight:bold;
+                                border:none; border-radius:10px; background:#e3f2fd;
+                                padding:6px 0; font-size:16px; color:#0d47a1;
+                                box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+                           ">
+                    <button type="button" class="increase-btn"
+                            data-product-name="${product.namaProduk.toLowerCase()}"
+                            style="
+                                width:40px; height:40px;
+                                border:none; border-radius:50%;
+                                background:#4caf50; color:white; font-size:20px;
+                                cursor:pointer; transition:all 0.2s;
+                            ">+</button>
+                </div>
+            `;
+            soldItemsList.appendChild(productItem);
+        });
 
-            soldItemsList.querySelectorAll('.jumlah-terjual').forEach(input => {
-                input.addEventListener('input', (e) => {
-                    const soldUnits = parseInt(e.target.value) || 0;
-                    const hargaSatuan = parseInt(e.target.getAttribute('data-harga-satuan'));
-                    const productName = e.target.getAttribute('data-product-name');
+        // Tombol +
+        soldItemsList.querySelectorAll('.increase-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const productName = btn.getAttribute('data-product-name');
+                const input = soldItemsList.querySelector(`.jumlah-terjual[data-product-name="${productName}"]`);
+                let value = parseInt(input.value) || 0;
+                const max = parseInt(products[productName].totalUnit);
+                if (value < max) {
+                    input.value = value + 1;
                     calculateProfits(sellerData, products);
-                    saveSoldItemToDatabase(productName, soldUnits, hargaSatuan);
-                });
+                    saveSoldItemToDatabase(productName, value + 1, parseInt(input.getAttribute('data-harga-satuan')));
+                }
             });
+        });
 
-            calculateProfits(sellerData, products);
-        } else {
-            soldItemsForm.style.display = 'none';
-        }
+        // Tombol -
+        soldItemsList.querySelectorAll('.decrease-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const productName = btn.getAttribute('data-product-name');
+                const input = soldItemsList.querySelector(`.jumlah-terjual[data-product-name="${productName}"]`);
+                let value = parseInt(input.value) || 0;
+                if (value > 0) {
+                    input.value = value - 1;
+                    calculateProfits(sellerData, products);
+                    saveSoldItemToDatabase(productName, value - 1, parseInt(input.getAttribute('data-harga-satuan')));
+                }
+            });
+        });
+
+        calculateProfits(sellerData, products);
+    } else {
+        soldItemsForm.style.display = 'none';
     }
+}
+
 
     // === HITUNG KEUNTUNGAN ===
     // === HITUNG KEUNTUNGAN ===
