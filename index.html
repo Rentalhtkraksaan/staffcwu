@@ -155,6 +155,29 @@
             font-size: 1.2em;
             font-weight: bold;
         }
+        #totalOverall {
+    display: none !important;
+}
+
+
+        /* === SEMBUNYIKAN TABEL DATA === */
+#dataTable {
+    display: none !important;
+}
+
+        /* === SEMBUNYIKAN PILIH DAN LIHAT TANGGAL === */
+.date-picker,
+.filter-group {
+    display: none !important;
+}
+
+
+        /* Sembunyikan tombol hapus data dan status formulir */
+#deleteSelectedBtn,
+.form-status-control {
+    display: none !important;
+}
+
         #exportBtn {
   display: none !important;
 }
@@ -308,6 +331,67 @@
                 text-align: left;
             }
         }
+        .drive-link {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #007bff;
+  color: white;
+  border-radius: 50%;
+  font-size: 20px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+  text-decoration: none;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.drive-link:hover {
+  transform: scale(1.15);
+  background-color: #0056b3;
+}
+.back-link {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #007bff, #0056b3);
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
+  transition: all 0.3s ease;
+  animation: pulseGlow 2s infinite;
+}
+
+.back-link:hover {
+  transform: scale(1.1) rotate(-3deg);
+  box-shadow: 0 6px 18px rgba(0, 123, 255, 0.6);
+  background: linear-gradient(145deg, #0069d9, #004ca3);
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 18px rgba(0, 123, 255, 0.8);
+  }
+}
+
+.back-link:active {
+  transform: scale(0.95);
+}
+
+
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -315,18 +399,22 @@
 </head>
 <body>
     <div class="container">
-        <a href="index.html" class="back-link" title="Kembali ke Beranda" aria-label="Kembali ke Beranda">
-            <i class="fas fa-arrow-left" aria-hidden="true"></i>
-        </a>
-    <!-- Icon Google Drive -->
-    <a href="index.html" 
-       target="_blank" 
-       class="drive-link" 
-       title="Buka Google Drive">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/d/da/Google_Drive_logo.png" alt="Google Drive">
-    </a>
+        <a href="#" id="backLink" class="back-link" title="Kembali ke Dashboard">
+    <i class="fas fa-arrow-left"></i>
+</a>
 
-    <h1>Dashboard Penjualan Klub</h1>
+    <!-- Icon Google Drive -->
+    <!-- Tombol + di pojok kanan atas -->
+<a href="https://cwudrops.vercel.app"
+   target="_blank"
+   class="drive-link"
+   title="Tambah Data Baru"
+   aria-label="Tambah Data">
+   <i class="fas fa-plus"></i>
+</a>
+
+
+    <h1>Dashboard Penjualan Club</h1>
 
         
         <div class="controls">
@@ -450,6 +538,20 @@
             console.error('❌ Gagal simpan:', error);
         });
     }
+
+    const backLink = document.getElementById('backLink');
+
+backLink.addEventListener('click', (e) => {
+  e.preventDefault();
+
+  // Buat efek keluar animasi sebelum redirect
+  document.body.style.transition = 'opacity 0.5s ease';
+  document.body.style.opacity = '0';
+
+  setTimeout(() => {
+    window.location.href = 'https://admcwudrops.vercel.app';
+  }, 500);
+});
 
     // === MUAT DATA TERJUAL DARI FIREBASE ===
     function loadSoldItemsFromDatabase(sellerData, products) {
